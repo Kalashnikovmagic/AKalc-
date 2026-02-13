@@ -12,7 +12,7 @@ let waiting = false;
 // ===== SECRET DATE =====
 let X=null,Y="",fullY="",Z=0,waitingForY=false;
 
-// ===== AKALC =====
+// ===== AKALC / FORCE =====
 let akalcNumber = localStorage.getItem("akalc") || "";
 let akalcIndex = 0;
 let akalcLocked = false;
@@ -34,12 +34,9 @@ document.addEventListener("pointerup", e=>{
   const k=btn.dataset.k;
 
   // Backspace
-  if(k==="bs"){
-    if(current.length>1) current=current.slice(0,-1); else current="0";
-    update(); return;
-  }
+  if(k==="bs"){ if(current.length>1) current=current.slice(0,-1); else current="0"; update(); return; }
 
-  // AKALC
+  // AKALC / FORCE
   if(mode==="akalc"){
     if(akalcLocked) return;
     if(akalcIndex < akalcNumber.length){ current = (current==="0"?"":current)+akalcNumber[akalcIndex++]; update(); }
@@ -57,7 +54,10 @@ document.addEventListener("pointerup", e=>{
   }
 
   // NORMAL + DATA
-  if(k==="clear"){ mode==="secretDate"?updateClearButton():null; current="0"; previous=null; operator=null; X=null;Y="";fullY="";waitingForY=false; update(); return; }
+  if(k==="clear"){ 
+    mode="normal"; current="0"; previous=null; operator=null; X=null;Y="";fullY="";waitingForY=false; update(); updateClearButton(); 
+    return; 
+  }
   if(k==="%"){ if(mode==="normal"){ mode="secretDate"; current="0"; updateClearButton(); update(); } return; }
   if(!isNaN(k)){ if(waiting){ current=k; waiting=false; } else current=current==="0"?k:current+k; update(); return; }
   if(k==="="){
@@ -82,7 +82,7 @@ document.addEventListener("touchend",()=>active=false);
 document.getElementById("saveAkalc").onclick=()=>{
   akalcNumber=akalcInput.value.replace(/\D/g,"");
   localStorage.setItem("akalc",akalcNumber);
-  akalcIndex=0; akalcLocked=false; current="0"; mode="akalc"; menu.style.display="none"; update();
+  akalcIndex=0; akalcLocked=false; current="0"; mode="akalc"; menu.style.display="none"; update(); updateClearButton();
 };
 
 document.getElementById("resetAkalc").onclick=()=>{
