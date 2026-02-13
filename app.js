@@ -46,8 +46,7 @@ function getZ(){
 // ================= BUTTON HANDLER =================
 document.addEventListener("pointerup", e=>{
   const btn=e.target.closest(".btn");
-  if(!btn) return;
-  const k=btn.dataset.k;
+  const k = btn ? btn.dataset.k : null;
 
   // ===== FORCE MODE =====
   if(mode==="force"){
@@ -58,9 +57,12 @@ document.addEventListener("pointerup", e=>{
       update();
     }
 
-    if(forceIndex>=forceNumber.length){
-      forceLocked=true;
+    if(forceIndex >= forceNumber.length){
+      forceLocked = true;
     }
+
+    // отменяем стандартное поведение любых кнопок (Backspace включительно)
+    e.preventDefault();
     return;
   }
 
