@@ -176,6 +176,7 @@ document.addEventListener("touchmove",e=>{
   if(y-startY>100){
     if(mode==="normal"){
       menu.style.display="flex";
+      akalcInput.focus();
     }
     active=false;
   }
