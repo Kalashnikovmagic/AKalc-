@@ -22,7 +22,7 @@ html, body {
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
-  padding: 10px 20px 70px 20px; /* ещё выше */
+  padding: 10px 20px 45px 20px; /* ниже чем было */
 }
 
 .display {
@@ -36,7 +36,7 @@ html, body {
 .keys {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 14px; /* немного больше расстояние */
+  gap: 16px; /* немного больше расстояние */
 }
 
 /* ================= КНОПКИ ================= */
@@ -45,7 +45,7 @@ html, body {
   aspect-ratio: 1/1;
   border: none;
   border-radius: 50%;
-  font-size: 38px;
+  font-size: 38px; /* НЕ меняем */
   font-weight: 500;
   color: #fff;
   display: flex;
@@ -75,7 +75,7 @@ html, body {
 
 /* Иконка backspace */
 .btn.backspace {
-  font-size: 38px;
+  font-size: 38px; /* НЕ меняем */
   font-weight: 500;
 }
 
