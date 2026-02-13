@@ -1,118 +1,30 @@
-* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-
-html, body {
-  margin:0;
-  height:100%;
-  background:#000;
-  color:#fff;
-  font-family:-apple-system, system-ui;
-  overflow:hidden;
-  overscroll-behavior:none;
-  touch-action:manipulation;
-  user-select:none;
+:root{
+  --bg:#000;
+  --digit:#2c2c2e;
+  --func:#5c5c5f;
+  --op:#ff9f0a;
+  --text:#fff;
+  --gap:10px;
 }
 
-.app {
-  max-width:480px;
-  margin:auto;
-  display:flex;
-  flex-direction:column;
-  justify-content:flex-end;
-  height:100%;
-  padding:20px;
-}
+*{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+html,body{height:100%; margin:0; background:var(--bg); color:var(--text); font-family:-apple-system,BlinkMacSystemFont,system-ui; overflow:hidden; touch-action:manipulation; user-select:none;}
 
-.display {
-  font-size:60px;
-  text-align:right;
-  padding:20px 10px;
-  white-space:nowrap;
-  overflow-x:auto;
-}
+.app{max-width:480px; margin:auto; display:flex; flex-direction:column; justify-content:flex-end; height:100%; padding:20px;}
+.display{font-size:60px; text-align:right; padding:20px 10px; white-space:nowrap; overflow-x:auto;}
+.keys{display:grid; grid-template-columns:repeat(4,1fr); gap:var(--gap);}
+.btn{aspect-ratio:1/1; border:none; border-radius:50%; font-size:24px; display:flex; justify-content:center; align-items:center; cursor:pointer; box-shadow: inset 0 1px 0 rgba(255,255,255,.1); transition: transform 0.2s cubic-bezier(0.34,1.56,0.64,1), filter 0.2s ease; user-select:none;}
+.btn.digit{background:var(--digit); color:var(--text);}
+.btn.func{background:var(--func); color:#fff;}
+.btn.op{background:var(--op); color:#fff;}
+.btn:active{transform:scale(1.25); filter:brightness(1.3);}
+.btn.bounce{animation:bounceRelease 0.25s forwards;}
+@keyframes bounceRelease{0%{transform:scale(1.25);}50%{transform:scale(0.95);}100%{transform:scale(1);}}
 
-.keys {
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-}
-
-.btn {
-  aspect-ratio:1/1;
-  border:none;
-  border-radius:50%;
-  font-size:24px;
-  background:#2c2c2e;
-  color:white;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  user-select:none;
-  cursor:pointer;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
-}
-
-.btn.op { background:#ff9f0a; color:#fff; }
-.btn.func { background:#5c5c5f; }
-
-.btn:active {
-  transform: scale(1.25);
-  filter: brightness(1.3);
-}
-
-.btn.bounce {
-  animation: bounceRelease 0.25s forwards;
-}
-
-@keyframes bounceRelease {
-  0% { transform: scale(1.25); }
-  50% { transform: scale(0.95); }
-  100% { transform: scale(1); }
-}
-
-/* Меню Force/AKALC */
-.menu {
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.95);
-  display:none;
-  align-items:center;
-  justify-content:center;
-}
-
-.menuCard {
-  background:#1c1c1e;
-  padding:20px;
-  border-radius:16px;
-  width:80%;
-}
-
-.menu input {
-  width:100%;
-  padding:10px;
-  font-size:18px;
-  margin-bottom:10px;
-}
-
-.menuBtns {
-  display:flex;
-  gap:10px;
-}
-
-.menuBtn {
-  flex:1;
-  padding:10px;
-  font-size:16px;
-  border-radius:12px;
-  border:none;
-  cursor:pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
-}
-
-#resetAkalc { background:#5c5c5f; color:#fff; }
-#saveAkalc { background:#ff9f0a; color:#fff; }
-
-.menuBtn:active {
-  transform: scale(1.08);
-  filter: brightness(1.2);
-}
+.menu{position:fixed; inset:0; background:rgba(0,0,0,.95); display:none; align-items:center; justify-content:center;}
+.menuCard{background:#1c1c1e; padding:20px; border-radius:16px; width:80%; display:flex; flex-direction:column; gap:12px;}
+.menu input{width:100%; padding:10px; font-size:18px; border-radius:12px; border:none; outline:none; background:#2c2c2e; color:#fff;}
+.menuBtns{display:flex; gap:10px;}
+.menuBtn{flex:1; height:44px; border:none; border-radius:12px; font-size:16px; cursor:pointer;}
+.menuBtn.reset{background:#5c5c5f; color:#fff;}
+.menuBtn.save{background:#ff9f0a; color:#fff;}
