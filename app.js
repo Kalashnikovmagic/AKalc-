@@ -243,6 +243,29 @@ document.addEventListener("touchend", e => {
 }, { passive: false });
 document.addEventListener("selectstart", e => e.preventDefault());
 
+// ================= HORIZONTAL SWIPE FOR DISPLAY =================
+const displayEl = document.querySelector(".display");
+let startX = null;
+let scrollLeft = null;
+
+displayEl.addEventListener("touchstart", e => {
+  if (e.touches.length !== 1) return;
+  startX = e.touches[0].clientX;
+  scrollLeft = displayEl.scrollLeft;
+}, { passive: true });
+
+displayEl.addEventListener("touchmove", e => {
+  if (startX === null || e.touches.length !== 1) return;
+  const x = e.touches[0].clientX;
+  const walk = startX - x; // движение свайпа
+  displayEl.scrollLeft = scrollLeft + walk;
+}, { passive: false });
+
+displayEl.addEventListener("touchend", () => {
+  startX = null;
+  scrollLeft = null;
+});
+
 // ================= START =================
 update();
 updateClearButton();
