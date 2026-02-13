@@ -1,0 +1,70 @@
+* { box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+
+html, body {
+  margin:0;
+  height:100%;
+  background:#000;
+  color:#fff;
+  font-family:-apple-system, system-ui;
+  overflow:hidden;
+  overscroll-behavior:none;
+  touch-action:manipulation;
+  user-select:none;
+}
+
+.app {
+  max-width:480px;
+  margin:auto;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  height:100%;
+  padding:20px;
+}
+
+.display {
+  font-size:60px;
+  text-align:right;
+  padding:20px 10px;
+}
+
+.keys {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+}
+
+.btn {
+  height:70px;
+  border:none;
+  border-radius:50%;
+  font-size:24px;
+  background:#2c2c2e;
+  color:white;
+}
+
+.op { background:#ff9f0a; }
+.func { background:#5c5c5f; }
+
+.menu {
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.95);
+  display:none;
+  align-items:center;
+  justify-content:center;
+}
+
+.menuCard {
+  background:#1c1c1e;
+  padding:20px;
+  border-radius:16px;
+  width:80%;
+}
+
+.menu input {
+  width:100%;
+  padding:10px;
+  font-size:18px;
+  margin-bottom:10px;
+}
