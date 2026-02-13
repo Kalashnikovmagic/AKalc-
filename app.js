@@ -3,6 +3,7 @@ const menu = document.getElementById("menu");
 const akalcInput = document.getElementById("akalcInput");
 const resetBtn = document.getElementById("resetAkalc");
 const saveBtn = document.getElementById("saveAkalc");
+const clearBtn = document.querySelector('[data-k="ac"]');
 
 let mode = "normal"; // normal | secretDate | akalc (force)
 
@@ -26,8 +27,7 @@ function update() {
 
 // ================= CLEAR BUTTON =================
 function updateClearButton() {
-  if (mode === "secretDate") document.querySelector('[data-k="ac"]').textContent = "AC";
-  else document.querySelector('[data-k="ac"]').textContent = "C";
+  clearBtn.textContent = mode === "secretDate" ? "AC" : "C";
 }
 
 // ================= NORMAL CALC =================
@@ -64,8 +64,9 @@ document.addEventListener("pointerup", e => {
     return;
   }
 
-  // ===== SECRET DATE =====
+  // ===== SECRET DATE MODE =====
   if (mode === "secretDate") {
+    // Любой тап после + вводит Y
     if (waitingForY) {
       if (Y.length < fullY.length) {
         Y += fullY[Y.length];
@@ -74,6 +75,17 @@ document.addEventListener("pointerup", e => {
       }
       if (Y.length >= fullY.length) {
         waitingForY = false;
+        current = Y; // фиксируем Y
+      }
+      return; // игнорируем другие кнопки
+    }
+
+    // После полного Y блокируем все кроме =
+    if (Y.length >= fullY.length && operator === "+") {
+      if (k === "=") {
+        current = String(Z);
+        operator = null;
+        update();
       }
       return;
     }
@@ -181,7 +193,7 @@ saveBtn.onclick = () => {
 
   akalcIndex = 0;
   akalcLocked = false;
-  current = "0"; // сброс экрана на 0, исправлено
+  current = "0"; // экран начинается с 0
   mode = "akalc";
   menu.style.display = "none";
   update();
