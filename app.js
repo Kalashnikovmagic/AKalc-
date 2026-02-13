@@ -1,6 +1,7 @@
 const display = document.getElementById("display");
 const menu = document.getElementById("menu");
 const akalcInput = document.getElementById("akalcInput");
+const clearBtn = document.querySelector('[data-k="clear"]');
 
 let mode = "normal"; // normal | secretDate | akalc
 
@@ -20,6 +21,12 @@ let akalcLocked = false;
 // ================= DISPLAY =================
 function update() {
   display.textContent = current.replace('.',',');
+}
+
+// ================= CLEAR BUTTON =================
+function updateClearButton(){
+  if(mode==="secretDate") clearBtn.textContent = "AC";
+  else clearBtn.textContent = "C";
 }
 
 // ================= NORMAL =================
@@ -74,9 +81,8 @@ document.addEventListener("pointerup", e=>{
   }
 
   // ===== NORMAL + SECRET DATE COMMON =====
-
   if(k==="clear"){
-    if(mode==="secretDate"){ mode="normal"; }
+    if(mode==="secretDate"){ mode="normal"; updateClearButton(); }
     current="0"; previous=null; operator=null;
     X=null;Y="";fullY="";waitingForY=false;
     update();
@@ -87,6 +93,7 @@ document.addEventListener("pointerup", e=>{
     if(mode==="normal"){
       mode="secretDate";
       current="0";
+      updateClearButton();
       update();
     }
     return;
@@ -190,6 +197,7 @@ document.getElementById("resetAkalc").onclick=()=>{
   current="0";
   menu.style.display="none";
   update();
+  updateClearButton();
 };
 
 // ================= NO ZOOM / NO SCROLL =================
@@ -203,4 +211,6 @@ document.addEventListener("touchend",e=>{
 },{passive:false});
 document.addEventListener("selectstart",e=>e.preventDefault());
 
+// ===== START =====
 update();
+updateClearButton();
