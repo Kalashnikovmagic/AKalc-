@@ -66,7 +66,7 @@ document.addEventListener("pointerup", e => {
 
   // ===== SECRET DATE MODE =====
   if (mode === "secretDate") {
-    // Любой тап после + вводит Y
+    // Ввод Y после +
     if (waitingForY) {
       if (Y.length < fullY.length) {
         Y += fullY[Y.length];
@@ -77,17 +77,17 @@ document.addEventListener("pointerup", e => {
         waitingForY = false;
         current = Y; // фиксируем Y
       }
-      return; // игнорируем другие кнопки
+      return; // игнорируем другие кнопки во время ввода Y
     }
 
-    // После полного Y блокируем все кроме =
+    // После полного Y блокируем все кнопки кроме "="
     if (Y.length >= fullY.length && operator === "+") {
       if (k === "=") {
         current = String(Z);
         operator = null;
         update();
       }
-      return;
+      return; // игнорируем любые другие нажатия
     }
   }
 
