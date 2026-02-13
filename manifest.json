@@ -1,7 +1,8 @@
 {
-  "name": "Calculator",
-  "short_name": "Calc",
-  "start_url": ".",
+  "name": "AKalc",
+  "short_name": "AKalc",
+  "start_url": "/AKalc-/",
+  "scope": "/AKalc-/",
   "display": "standalone",
   "background_color": "#000000",
   "theme_color": "#000000",
