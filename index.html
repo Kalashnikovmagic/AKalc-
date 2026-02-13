@@ -48,10 +48,16 @@
     </div>
   </div>
 
-  <!-- AKALC MENU -->
+  <!-- FORCE (AKALC) MENU -->
   <div class="menu" id="menu">
     <div class="menuCard">
-      <input id="akalcInput" type="number" placeholder="Напиши число здесь 😉">
+      <input 
+        id="akalcInput" 
+        type="number" 
+        inputmode="numeric" 
+        pattern="[0-9]*" 
+        placeholder="Напиши число здесь 😉"
+      >
       <div class="menuBtns">
         <button class="menuBtn" id="resetAkalc">Сбросить</button>
         <button class="menuBtn" id="saveAkalc">Сохранить</button>
