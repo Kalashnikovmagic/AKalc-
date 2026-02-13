@@ -22,7 +22,7 @@ html, body {
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
-  padding: 10px 20px 20px 20px; /* верхний паддинг уменьшен для подъёма интерфейса */
+  padding: 10px 20px 20px 20px;
 }
 
 .display {
@@ -39,25 +39,45 @@ html, body {
   gap: 10px;
 }
 
+/* ================= КНОПКИ ================= */
+
 .btn {
   aspect-ratio: 1/1;
   border: none;
   border-radius: 50%;
-  font-size: 38px; /* размер всех иконок и цифр одинаковый */
-  font-weight: 500; /* чуть меньше жирности для backspace */
-  background: #2c2c2e;
-  color: white;
+  font-size: 38px;
+  font-weight: 500;
+  color: #fff;
   display: flex;
   justify-content: center;
   align-items: center;
-  user-select: none;
   cursor: pointer;
   box-shadow: inset 0 1px 0 rgba(255,255,255,.1);
   transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
 }
 
-.btn.op { background: #ff9f0a; color: #fff; }
-.btn.func { background: #5c5c5f; }
+/* 0-9, +/-, , */
+.btn.digit,
+.btn.sign,
+.btn.decimal {
+  background: #323232;
+}
+
+/* backspace, AC, % */
+.btn.func {
+  background: #5b5b5b;
+}
+
+/* ÷ × − + = */
+.btn.op {
+  background: #ff9201;
+}
+
+/* Иконка backspace */
+.btn.backspace {
+  font-size: 38px;
+  font-weight: 500;
+}
 
 .btn:active {
   transform: scale(1.25);
@@ -74,7 +94,8 @@ html, body {
   100% { transform: scale(1); }
 }
 
-/* Меню FORCE */
+/* ================= SECRET MENU ================= */
+
 .menu {
   position: fixed;
   inset: 0;
@@ -105,7 +126,7 @@ html, body {
 
 .menuBtns .resetBtn {
   flex: 1;
-  background: #8e8e93; /* серый в стиле iOS */
+  background: #8e8e93;
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -115,7 +136,7 @@ html, body {
 
 .menuBtns .saveBtn {
   flex: 1;
-  background: #ff9500; /* оранжевый в стиле iOS */
+  background: #ff9500;
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -123,7 +144,6 @@ html, body {
   font-size: 18px;
 }
 
-/* Анимация кнопок меню */
 .menuBtns button:active {
   transform: scale(1.05);
   filter: brightness(1.2);
