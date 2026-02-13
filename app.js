@@ -1,251 +1,225 @@
 const display = document.getElementById("display");
 const menu = document.getElementById("menu");
 const akalcInput = document.getElementById("akalcInput");
-const clearBtn = document.querySelector('[data-k="ac"]'); // C/AC
+const resetBtn = document.getElementById("resetAkalc");
+const saveBtn = document.getElementById("saveAkalc");
 
-let mode = "normal"; // normal | secretDate | force
+let mode = "normal"; // normal | secretDate | akalc (force)
+
 let current = "0";
 let operator = null;
 let previous = null;
 let waiting = false;
 
 // ===== SECRET DATE =====
-let X=null,Y="",fullY="",Z=0,waitingForY=false;
+let X = null, Y = "", fullY = "", Z = 0, waitingForY = false;
 
-// ===== FORCE =====
-let forceNumber = localStorage.getItem("forceNumber") || "";
-let forceIndex = 0;
-let forceLocked = false;
+// ===== FORCE MODE =====
+let akalcNumber = localStorage.getItem("akalc") || "";
+let akalcIndex = 0;
+let akalcLocked = false;
 
 // ================= DISPLAY =================
 function update() {
-  display.textContent = current.replace('.',',');
+  display.textContent = current.replace('.', ',');
 }
 
 // ================= CLEAR BUTTON =================
-function updateClearButton(){
-  clearBtn.textContent = mode==="secretDate" ? "AC" : "C";
+function updateClearButton() {
+  if (mode === "secretDate") document.querySelector('[data-k="ac"]').textContent = "AC";
+  else document.querySelector('[data-k="ac"]').textContent = "C";
 }
 
 // ================= NORMAL CALC =================
-function calc(a,b,op){
-  if(op==="+") return a+b;
-  if(op==="−") return a-b;
-  if(op==="×") return a*b;
-  if(op==="÷") return b===0?0:a/b;
+function calc(a, b, op) {
+  if (op === "+") return a + b;
+  if (op === "−") return a - b;
+  if (op === "×") return a * b;
+  if (op === "÷") return b === 0 ? 0 : a / b;
 }
 
 // ================= SECRET DATE =================
-function getZ(){
-  const d=new Date();
-  const pad=n=>n.toString().padStart(2,"0");
-  return Number(pad(d.getDate())+pad(d.getMonth()+1)+pad(d.getHours())+pad(d.getMinutes()));
+function getZ() {
+  const d = new Date();
+  const pad = n => n.toString().padStart(2, "0");
+  return Number(pad(d.getDate()) + pad(d.getMonth() + 1) + pad(d.getHours()) + pad(d.getMinutes()));
 }
 
 // ================= BUTTON HANDLER =================
-document.addEventListener("pointerup", e=>{
-  const btn=e.target.closest(".btn");
-  const k = btn ? btn.dataset.k : null;
+document.addEventListener("pointerup", e => {
+  const btn = e.target.closest(".btn");
+  if (!btn) return;
+  const k = btn.dataset.k;
 
   // ===== FORCE MODE =====
-  if(mode==="force"){
-    if(forceLocked) return;
+  if (mode === "akalc") {
+    if (akalcLocked) return;
 
-    if(forceIndex < forceNumber.length){
-      current = (current==="0"?"":current)+forceNumber[forceIndex++];
+    if (akalcIndex < akalcNumber.length) {
+      current = (current === "0" ? "" : current) + akalcNumber[akalcIndex++];
       update();
     }
 
-    if(forceIndex >= forceNumber.length){
-      forceLocked = true;
-    }
-
-    e.preventDefault();
+    if (akalcIndex >= akalcNumber.length) akalcLocked = true;
     return;
   }
 
-  // ===== SECRET DATE MODE =====
-  if(mode==="secretDate"){
-    if(waitingForY){
-      if(Y.length<fullY.length){
-        Y+=fullY[Y.length];
-        current=Y;
+  // ===== SECRET DATE =====
+  if (mode === "secretDate") {
+    if (waitingForY) {
+      if (Y.length < fullY.length) {
+        Y += fullY[Y.length];
+        current = Y;
         update();
       }
-      if(Y.length>=fullY.length){
-        waitingForY=false;
+      if (Y.length >= fullY.length) {
+        waitingForY = false;
       }
       return;
     }
   }
 
-  // ===== NORMAL + SECRET DATE COMMON =====
-  if(k==="ac" || k==="C"){
-    if(mode==="secretDate" || mode==="force") {
-      mode="normal";
-      forceIndex=0;
-      forceLocked=false;
-      updateClearButton();
-    }
-    current="0"; previous=null; operator=null;
-    X=null;Y="";fullY="";waitingForY=false;
+  // ===== COMMON BUTTONS =====
+  if (k === "clear") {
+    if (mode === "secretDate") mode = "normal";
+    current = "0"; previous = null; operator = null;
+    X = null; Y = ""; fullY = ""; waitingForY = false;
+    updateClearButton();
     update();
     return;
   }
 
-  if(k==="%"){
-    if(mode==="normal"){
-      mode="secretDate";
-      current="0";
+  if (k === "%") {
+    if (mode === "normal") {
+      mode = "secretDate";
+      current = "0";
       updateClearButton();
       update();
     }
     return;
   }
 
-  if(!isNaN(k)){
-    if(waiting){ current=k; waiting=false; }
-    else current=current==="0"?k:current+k;
+  if (!isNaN(k)) {
+    if (waiting) { current = k; waiting = false; }
+    else current = current === "0" ? k : current + k;
     update();
     return;
   }
 
-  if(k==="="){
-    if(mode==="secretDate"){
-      if(operator==="×"){
-        X=calc(X,parseFloat(current),"×");
-        current=String(X);
-        operator=null;
-      }
-      else if(operator==="+" && !waitingForY){
-        current=String(Z);
-        operator=null;
+  if (k === "=") {
+    if (mode === "secretDate") {
+      if (operator === "×") {
+        X = calc(X, parseFloat(current), "×");
+        current = String(X);
+        operator = null;
+      } else if (operator === "+" && !waitingForY) {
+        current = String(Z);
+        operator = null;
       }
       update();
       return;
     }
 
-    if(operator){
-      current=String(calc(previous,parseFloat(current),operator));
-      operator=null; previous=null;
+    if (operator) {
+      current = String(calc(previous, parseFloat(current), operator));
+      operator = null; previous = null;
       update();
     }
     return;
   }
 
-  if(["+","−","×","÷"].includes(k)){
-    if(mode==="secretDate"){
-      const val=parseFloat(current);
-      if(k==="×"){
-        X=X===null?val:calc(X,val,"×");
-        operator="×";
-        waiting=true;
+  if (["+", "−", "×", "÷"].includes(k)) {
+    if (mode === "secretDate") {
+      const val = parseFloat(current);
+      if (k === "×") {
+        X = X === null ? val : calc(X, val, "×");
+        operator = "×";
+        waiting = true;
       }
-      if(k==="+"){
-        waitingForY=true;
-        Y=""; current="0";
-        Z=getZ();
-        fullY=String(Z-X);
-        operator="+";
+      if (k === "+") {
+        waitingForY = true;
+        Y = ""; current = "0";
+        Z = getZ();
+        fullY = String(Z - X);
+        operator = "+";
       }
       return;
     }
 
-    previous=parseFloat(current);
-    operator=k;
-    waiting=true;
+    previous = parseFloat(current);
+    operator = k;
+    waiting = true;
   }
 
   update();
 });
 
 // ================= TRIPLE SWIPE =================
-let startY=null,active=false;
-
-document.addEventListener("touchstart",e=>{
-  if(e.touches.length===3){
-    active=true;
-    startY=[...e.touches].reduce((a,t)=>a+t.clientY,0)/3;
+let startY = null, active = false;
+document.addEventListener("touchstart", e => {
+  if (e.touches.length === 3) {
+    active = true;
+    startY = [...e.touches].reduce((a, t) => a + t.clientY, 0) / 3;
   }
-},{passive:true});
+}, { passive: true });
 
-document.addEventListener("touchmove",e=>{
-  if(!active||e.touches.length!==3)return;
-  const y=[...e.touches].reduce((a,t)=>a+t.clientY,0)/3;
-  if(y-startY>100){
-    if(mode==="normal"){
-      menu.style.display="flex";
-      akalcInput.focus();
-    }
-    active=false;
+document.addEventListener("touchmove", e => {
+  if (!active || e.touches.length !== 3) return;
+  const y = [...e.touches].reduce((a, t) => a + t.clientY, 0) / 3;
+  if (y - startY > 100 && mode === "normal") {
+    menu.style.display = "flex";
+    active = false;
   }
-},{passive:true});
+}, { passive: true });
 
-document.addEventListener("touchend",()=>active=false);
+document.addEventListener("touchend", () => active = false);
 
-// ================= FORCE MENU =================
-const saveBtnMenu = document.getElementById("saveAkalc");
-const resetBtnMenu = document.getElementById("resetAkalc");
+// ================= FORCE SECRET MENU =================
+saveBtn.onclick = () => {
+  akalcNumber = akalcInput.value.replace(/\D/g, "");
+  localStorage.setItem("akalc", akalcNumber);
 
-saveBtnMenu.addEventListener("pointerup", e=>{
-  const val = akalcInput.value.replace(/\D/g,"");
-  if(!val) return;
-  forceNumber = val;
-  localStorage.setItem("forceNumber",forceNumber);
-  forceIndex=0;
-  forceLocked=false;
-  current="0";
-  mode="force";
-  menu.style.display="none";
+  akalcIndex = 0;
+  akalcLocked = false;
+  current = "0"; // сброс экрана на 0, исправлено
+  mode = "akalc";
+  menu.style.display = "none";
   update();
+};
 
-  saveBtnMenu.classList.add("bounce");
-  saveBtnMenu.addEventListener("animationend", ()=>{
-    saveBtnMenu.classList.remove("bounce");
-  }, { once:true });
-
-  e.preventDefault();
-});
-
-resetBtnMenu.addEventListener("pointerup", e=>{
-  mode="normal";
-  forceIndex=0;
-  forceLocked=false;
-  current="0";
-  menu.style.display="none";
+resetBtn.onclick = () => {
+  mode = "normal";
+  akalcIndex = 0;
+  akalcLocked = false;
+  current = "0";
+  menu.style.display = "none";
   update();
   updateClearButton();
-
-  resetBtnMenu.classList.add("bounce");
-  resetBtnMenu.addEventListener("animationend", ()=>{
-    resetBtnMenu.classList.remove("bounce");
-  }, { once:true });
-
-  e.preventDefault();
-});
+};
 
 // ================= BUTTON ANIMATION =================
-document.querySelectorAll(".btn, .menuBtn").forEach(btn=>{
+document.querySelectorAll(".btn").forEach(btn => {
   btn.addEventListener("touchstart", e => e.preventDefault());
-  btn.addEventListener("pointerup", ()=>{
+
+  btn.addEventListener("pointerup", () => {
     btn.classList.add("bounce");
-    btn.addEventListener("animationend", ()=>{
+    btn.addEventListener("animationend", () => {
       btn.classList.remove("bounce");
-    }, { once:true });
+    }, { once: true });
   });
 });
 
 // ================= NO ZOOM / NO SCROLL =================
-document.addEventListener("gesturestart",e=>e.preventDefault());
-document.addEventListener("touchmove",e=>e.preventDefault(),{passive:false});
-let last=0;
-document.addEventListener("touchend",e=>{
-  const now=Date.now();
-  if(now-last<300)e.preventDefault();
-  last=now;
-},{passive:false});
-document.addEventListener("selectstart",e=>e.preventDefault());
+document.addEventListener("gesturestart", e => e.preventDefault());
+document.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+let last = 0;
+document.addEventListener("touchend", e => {
+  const now = Date.now();
+  if (now - last < 300) e.preventDefault();
+  last = now;
+}, { passive: false });
+document.addEventListener("selectstart", e => e.preventDefault());
 
-// ===== START =====
+// ================= START =================
 update();
 updateClearButton();
