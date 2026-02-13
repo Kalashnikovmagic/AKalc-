@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <link rel="stylesheet" href="style.css" />
   <title>Calculator</title>
+  <style>
+    /* Увеличиваем шрифт и размер SVG внутри кнопок */
+    .btn {
+      font-size: 32px; /* больше цифры и знаки */
+    }
+    .btn svg {
+      width: 36px;
+      height: 36px;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,8 +24,7 @@
     <div class="keys" id="keys">
       <!-- Row 1 -->
       <button class="btn func backspace" data-k="bs" aria-label="Backspace">
-        <!-- iOS style backspace icon, увеличенный как в iOS 26 -->
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="36" height="36">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <path d="M20 4H7L2 12l5 8h13a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1z"/>
           <line x1="12" y1="9" x2="16" y2="13"/>
           <line x1="16" y1="9" x2="12" y2="13"/>
