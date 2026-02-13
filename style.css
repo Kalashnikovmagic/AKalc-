@@ -16,13 +16,13 @@ html, body {
 }
 
 .app {
-  max-width: 480px;
+  max-width: 600px;
   margin: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
-  padding: 10px 20px 45px 20px; /* ниже чем было */
+  padding: 10px 20px 90px 20px; /* 90px снизу */
 }
 
 .display {
@@ -35,17 +35,19 @@ html, body {
 
 .keys {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px; /* немного больше расстояние */
+  grid-template-columns: repeat(4, 126px);
+  gap: 13px; /* строго 13px */
+  justify-content: center;
 }
 
 /* ================= КНОПКИ ================= */
 
 .btn {
-  aspect-ratio: 1/1;
+  width: 126px;
+  height: 126px;
   border: none;
   border-radius: 50%;
-  font-size: 38px; /* НЕ меняем */
+  font-size: 38px;
   font-weight: 500;
   color: #fff;
   display: flex;
@@ -73,10 +75,11 @@ html, body {
   background: #ff9201;
 }
 
-/* Иконка backspace */
-.btn.backspace {
-  font-size: 38px; /* НЕ меняем */
-  font-weight: 500;
+/* backspace иконка */
+.btn.backspace svg {
+  width: 38px;
+  height: 38px;
+  stroke-width: 2;
 }
 
 .btn:active {
@@ -114,9 +117,11 @@ html, body {
 
 .menu input {
   width: 100%;
-  padding: 10px;
+  padding: 12px;
   font-size: 18px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  border: none;
 }
 
 .menuBtns {
@@ -129,8 +134,8 @@ html, body {
   background: #8e8e93;
   color: #fff;
   border: none;
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 14px;
+  padding: 14px;
   font-size: 18px;
 }
 
@@ -139,8 +144,8 @@ html, body {
   background: #ff9500;
   color: #fff;
   border: none;
-  border-radius: 12px;
-  padding: 10px;
+  border-radius: 14px;
+  padding: 14px;
   font-size: 18px;
 }
 
