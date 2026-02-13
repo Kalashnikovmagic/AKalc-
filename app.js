@@ -1,7 +1,7 @@
 const display = document.getElementById("display");
 const menu = document.getElementById("menu");
 const akalcInput = document.getElementById("akalcInput");
-const clearBtn = document.querySelector('[data-k="clear"]');
+const clearBtn = document.querySelector('[data-k="ac"]'); // C/AC
 
 let mode = "normal"; // normal | secretDate | force
 let current = "0";
@@ -49,16 +49,15 @@ document.addEventListener("pointerup", e=>{
 
   // ===== FORCE MODE =====
   if(mode==="force"){
-    if(forceLocked) return; // после полного ввода ничего не делаем
+    if(forceLocked) return;
 
-    // Любой тап, включая Backspace, вводит следующую цифру
     if(forceIndex < forceNumber.length){
       current = (current==="0"?"":current)+forceNumber[forceIndex++];
       update();
     }
 
     if(forceIndex >= forceNumber.length){
-      forceLocked = true; // блокируем дальнейшие тапы
+      forceLocked = true;
     }
 
     e.preventDefault();
@@ -81,7 +80,7 @@ document.addEventListener("pointerup", e=>{
   }
 
   // ===== NORMAL + SECRET DATE COMMON =====
-  if(k==="clear"){
+  if(k==="ac" || k==="C"){
     if(mode==="secretDate" || mode==="force") {
       mode="normal";
       forceIndex=0;
