@@ -22,7 +22,7 @@ html, body {
   flex-direction: column;
   justify-content: flex-end;
   height: 100%;
-  padding: 10px 20px 90px 20px; /* 90px снизу */
+  padding: 10px 20px 12px 20px; /* снизу 12px */
 }
 
 .display {
@@ -35,19 +35,19 @@ html, body {
 
 .keys {
   display: grid;
-  grid-template-columns: repeat(4, 88px);
-  gap: 13px; /* сохраняем пропорцию */
+  grid-template-columns: repeat(4, 70px);
+  gap: 13px;
   justify-content: center;
 }
 
 /* ================= КНОПКИ ================= */
 
 .btn {
-  width: 88px;
-  height: 88px;
+  width: 70px;
+  height: 70px;
   border: none;
   border-radius: 50%;
-  font-size: 38px; /* размер текста НЕ меняем */
+  font-size: 38px; /* шрифт не трогаем */
   font-weight: 500;
   color: #fff;
   display: flex;
