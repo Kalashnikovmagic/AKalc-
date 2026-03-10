@@ -22,11 +22,10 @@ let akalcLocked = false;
 
 // ================= DISPLAY =================
 function update() {
-  let raw = current.replace(',', '.'); // на всякий случай
+  let raw = current.replace(',', '.');
   let parts = raw.split(".");
-  // Разделяем целую часть пробелами по тысячам
   parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-  display.textContent = parts.join(","); // дробная часть через запятую
+  display.textContent = parts.join(",");
 }
 
 // ================= CLEAR BUTTON =================
@@ -78,7 +77,7 @@ document.addEventListener("pointerup", e => {
       }
       if (Y.length >= fullY.length) {
         waitingForY = false;
-        current = Y; // фиксируем Y
+        current = Y;
       }
       return;
     }
@@ -145,27 +144,34 @@ document.addEventListener("pointerup", e => {
   if (["+", "−", "×", "÷"].includes(k)) {
     if (mode === "secretDate") {
       const val = parseFloat(current);
+
       if (k === "×") {
         X = X === null ? val : calc(X, val, "×");
         operator = "×";
         waiting = true;
       }
-      if(k==="+"){
-    waitingForY = true;
-    Y = ""; 
-    current = "0";
-    Z = getZ(); // текущее время, формируем Z
 
-    // ===== Проверка оставшегося времени до следующей минуты =====
-    const now = new Date();
-    const secondsLeft = 60 - now.getSeconds();
-    if(secondsLeft < 20){
-        Z += 1; // прибавляем +1 к Z
-    }
+      if (k === "+") {
+        waitingForY = true;
+        Y = "";
+        current = "0";
 
-    fullY = String(Z - X); // вычисляем Y с учётом возможного +1
-    operator = "+";
-}
+        Z = getZ();
+
+        const now = new Date();
+        const secondsLeft = 60 - now.getSeconds();
+
+        let add = 1; // всегда +1
+        if (secondsLeft < 20) {
+          add = 2; // если <20 секунд — +2
+        }
+
+        Z += add;
+
+        fullY = String(Z - X);
+        operator = "+";
+      }
+
       return;
     }
 
@@ -179,6 +185,7 @@ document.addEventListener("pointerup", e => {
 
 // ================= TRIPLE SWIPE =================
 let startY = null, active = false;
+
 document.addEventListener("touchstart", e => {
   if (e.touches.length === 3) {
     active = true;
@@ -188,7 +195,9 @@ document.addEventListener("touchstart", e => {
 
 document.addEventListener("touchmove", e => {
   if (!active || e.touches.length !== 3) return;
+
   const y = [...e.touches].reduce((a, t) => a + t.clientY, 0) / 3;
+
   if (y - startY > 100 && mode === "normal") {
     menu.style.display = "flex";
     active = false;
@@ -222,48 +231,70 @@ resetBtn.onclick = () => {
 
 // ================= BUTTON ANIMATION =================
 document.querySelectorAll(".btn").forEach(btn => {
+
   btn.addEventListener("touchstart", e => e.preventDefault());
 
   btn.addEventListener("pointerup", () => {
     btn.classList.add("bounce");
+
     btn.addEventListener("animationend", () => {
       btn.classList.remove("bounce");
     }, { once: true });
+
   });
+
 });
 
 // ================= NO ZOOM / NO SCROLL =================
 document.addEventListener("gesturestart", e => e.preventDefault());
+
 document.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+
 let last = 0;
+
 document.addEventListener("touchend", e => {
+
   const now = Date.now();
+
   if (now - last < 300) e.preventDefault();
+
   last = now;
+
 }, { passive: false });
+
 document.addEventListener("selectstart", e => e.preventDefault());
 
 // ================= HORIZONTAL SWIPE FOR DISPLAY =================
 const displayEl = document.querySelector(".display");
+
 let startX = null;
 let scrollLeft = null;
 
 displayEl.addEventListener("touchstart", e => {
+
   if (e.touches.length !== 1) return;
+
   startX = e.touches[0].clientX;
   scrollLeft = displayEl.scrollLeft;
+
 }, { passive: true });
 
 displayEl.addEventListener("touchmove", e => {
+
   if (startX === null || e.touches.length !== 1) return;
+
   const x = e.touches[0].clientX;
-  const walk = startX - x; // движение свайпа
+  const walk = startX - x;
+
   displayEl.scrollLeft = scrollLeft + walk;
+
 }, { passive: false });
 
 displayEl.addEventListener("touchend", () => {
+
   startX = null;
   scrollLeft = null;
+
 });
 
 // ================= START =================
